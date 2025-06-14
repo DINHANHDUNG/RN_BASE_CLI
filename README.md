@@ -27,4 +27,17 @@ yarn install
 yarn android
 
 yarn ios
-```"# RN_BASE_CLI" 
+```
+
+```bash
+- Chưa thêm Splash  (react-native-bootsplash) hoặc Intro (react-native-app-intro-slider)
+- Thông báo có thể dùng toast (react-native-toast-message) hoặc Alert
+```
+
+```bash
+- Thêm font
+- Copy file .ttf của font vào src/assets/fonts (ví dụ: Roboto-Regular.ttf)
+- Mở (hoặc tạo mới) file react-native.config.js (module.exports = { assets: ['./src/assets/fonts/']})
+- npx react-native-asset
+- IOS Mở Xcode, chọn project > Info > Add font vào UIAppFonts nếu chưa tự động nhận.
+```
