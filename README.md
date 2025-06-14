@@ -41,3 +41,11 @@ yarn ios
 - npx react-native-asset
 - IOS Mở Xcode, chọn project > Info > Add font vào UIAppFonts nếu chưa tự động nhận.
 ```
+
+```bash
+- Thêm icon
+- yarn add react-native-vector-icons
+- android/app/build.gradle: apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+- npx react-native-asset
+- IOS Mở Xcode, chọn project > Info > Add font vào UIAppFonts nếu chưa tự động nhận.
+```
