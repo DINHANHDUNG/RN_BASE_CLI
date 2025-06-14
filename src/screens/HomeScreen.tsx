@@ -1,11 +1,17 @@
 import React from 'react'
-import { View, Text, Button, StyleSheet } from 'react-native'
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native'
 import { useAppDispatch } from '../store/hooks'
 import { logout } from '../features/auth/authSlice'
 import Icon from '../components/Icon'
 import { textStyles } from '../themes/textStyles'
+import { useNavigation } from '@react-navigation/native'
+import { ROUTES } from '../navigation/routeKeys'
+import { HomeStackParamList } from '../types/navigation'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-export default function HomeScreen() {
+type Props = NativeStackScreenProps<HomeStackParamList, typeof ROUTES.HOME_MAIN>
+
+export default function HomeScreen({ navigation }: Props) {
   const dispatch = useAppDispatch()
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -19,8 +25,10 @@ export default function HomeScreen() {
       <Icon type="material" name="search" size={28} color="#1A2138" />
       <Text style={styles.label}>Tìm kiếm</Text>
 
-      <Icon type="material" name="settings" size={28} color="#F99" />
-      <Text style={styles.label}>Cài đặt</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(ROUTES.DETAIL, { id: 123 })}>
+        <Icon type="material" name="settings" size={28} color="#F99" />
+        <Text style={styles.label}>Cài đặt</Text>
+      </TouchableOpacity>
     </View>
   )
 }
