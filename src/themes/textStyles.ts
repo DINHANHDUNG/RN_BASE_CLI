@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
-import { fonts, fontSizes, colors } from './'
+import { fonts, fontSizes } from './fonts'
+import { colors } from './colors'
 
 export const textStyles = StyleSheet.create({
   h1: {
