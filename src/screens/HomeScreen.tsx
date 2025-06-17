@@ -4,7 +4,6 @@ import { useAppDispatch } from '../store/hooks'
 import { logout } from '../features/auth/authSlice'
 import Icon from '../components/Icon'
 import { textStyles } from '../themes/textStyles'
-import { useNavigation } from '@react-navigation/native'
 import { ROUTES } from '../navigation/routeKeys'
 import { HomeStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -13,6 +12,11 @@ type Props = NativeStackScreenProps<HomeStackParamList, typeof ROUTES.HOME_MAIN>
 
 export default function HomeScreen({ navigation }: Props) {
   const dispatch = useAppDispatch()
+
+  // useEffect( () => {
+    
+  //   const granted = await requestPermission(CAMERA_PERMISSION)
+  // }, []);
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home Screen</Text>

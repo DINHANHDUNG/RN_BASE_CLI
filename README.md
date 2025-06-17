@@ -4,6 +4,11 @@
 ## Cài đặt
 
 ```bash
+Sự dụng node 18
+```
+
+
+```bash
 yarn install
 cp .env.example .env
 yarn android # hoặc yarn ios
@@ -48,4 +53,10 @@ yarn ios
 - android/app/build.gradle: apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 - npx react-native-asset
 - IOS Mở Xcode, chọn project > Info > Add font vào UIAppFonts nếu chưa tự động nhận.
+```
+
+## Lỗi chạy trên IOS: command not found: gradlew
+```bash
+cd android
+./gradlew assembleDebug
 ```

@@ -1,27 +1,75 @@
 # Resolve react_native_pods.rb with node to allow for hoisting
-require Pod::Executable.execute_command('node', ['-p',
-  'require.resolve(
-    "react-native/scripts/react_native_pods.rb",
-    {paths: [process.argv[1]]},
-  )', __dir__]).strip
+def node_require(script)
+  # Resolve script with node to allow for hoisting
+  require Pod::Executable.execute_command('node', ['-p',
+    "require.resolve(
+       '#{script}',
+      {paths: [process.argv[1]]},
+    )", __dir__]).strip
+end
+# MIN_IOS_OVERRIDE = '15.5'
+# if Gem::Version.new(MIN_IOS_OVERRIDE) > Gem::Version.new(min_ios_version_supported)
+#     min_ios_version_supported = MIN_IOS_OVERRIDE
+# end
+platform :ios, '15.5'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+require_relative '../node_modules/react-native-permissions/scripts/setup.rb'
 
-platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+# linkage = ENV['USE_FRAMEWORKS']
+# if linkage != nil
+#   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+#   use_frameworks! :linkage => linkage.to_sym
+# end
+use_frameworks! :linkage => :static
 
 target 'rnBaseProject' do
   config = use_native_modules!
 
+  #Permission IOS
+  # ⬇️ uncomment the permissions you need
+  setup_permissions([
+    # 'AppTrackingTransparency',
+    # 'Bluetooth',
+    # 'Calendars',
+    # 'CalendarsWriteOnly',
+    'Camera',
+    # 'Contacts',
+    # 'FaceID',
+    # 'LocationAccuracy',
+    # 'LocationAlways',
+    # 'LocationWhenInUse',
+    # 'MediaLibrary',
+    'Microphone',
+    # 'Motion',
+    'Notifications',
+    'PhotoLibrary',
+    # 'PhotoLibraryAddOnly',
+    # 'Reminders',
+    # 'Siri',
+    # 'SpeechRecognition',
+    # 'StoreKit',
+  ])
+
+  # permissions = ['Camera', 'PhotoLibrary', 'Notifications']
+  # permissions.each do |permission|
+  #   pod "Permission-#{permission}", :path => "../node_modules/react-native-permissions/ios/#{permission}"
+  # end
+
+  # permissions = ['Camera', 'PhotoLibrary', 'Notifications']
+  # permissions.each do |permission|
+  #   pod "Permission-#{permission}", :path => "../node_modules/react-native-permissions/ios/#{permission}"
+  # end
+
   use_react_native!(
     :path => config[:reactNativePath],
-    # An absolute path to your application root.
+    :hermes_enabled => true,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+  # pod 'React-RCTAppDelegate', :path => '../node_modules/react-native/Libraries/AppDelegate'
 
   target 'rnBaseProjectTests' do
     inherit! :complete
@@ -36,5 +84,12 @@ target 'rnBaseProject' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # # 🔧 Ép tất cả pods dùng iOS 13.0 trở lên
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.5'
+      end
+    end
   end
 end
