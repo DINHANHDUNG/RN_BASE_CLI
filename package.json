@@ -4,15 +4,22 @@
   "private": true,
   "scripts": {
     "android": "cd android && ./gradlew clean && cd .. && react-native run-android",
+    "android-cls": "ENVFILE=.env yarn android",
     "android:dev": "ENVFILE=.env.dev yarn android",
     "android:staging": "ENVFILE=.env.staging yarn android",
-    "android:prod": "ENVFILE=.env.prod yarn android",
+    "android:prod": "ENVFILE=.env.production yarn android",
     "ios": "cd ios && pod install && cd .. && react-native run-ios",
+    "ios-cls": "npm run pod && ENVFILE=.env react-native run-ios",
+    "ios:dev": "npm run pod && ENVFILE=.env.dev react-native run-ios",
+    "ios:staging": "npm run pod && ENVFILE=.env.staging react-native run-ios",
+    "ios:prod": "npm run pod && ENVFILE=.env.production react-native run-ios",
+    "pod": "npx pod-install",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-camera-roll/camera-roll": "^7.10.0",
     "@react-native-community/masked-view": "^0.1.11",
@@ -27,12 +34,14 @@
     "i18next": "^25.2.1",
     "lodash": "^4.17.21",
     "react": "18.2.0",
+    "react-hook-form": "^7.58.1",
     "react-i18next": "^15.5.3",
     "react-native": "0.74.1",
     "react-native-bootsplash": "^6.3.9",
     "react-native-config": "^1.5.5",
     "react-native-gesture-handler": "2.15.0",
     "react-native-permissions": "^5.4.1",
+    "react-native-picker-select": "^9.3.1",
     "react-native-reanimated": "3.9.0",
     "react-native-safe-area-context": "^5.4.1",
     "react-native-screens": "^4.11.1",
@@ -40,7 +49,8 @@
     "react-native-svg-transformer": "^1.5.1",
     "react-native-toast-message": "^2.3.0",
     "react-native-vector-icons": "^10.2.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

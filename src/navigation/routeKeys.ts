@@ -1,4 +1,9 @@
 export const ROUTES = {
+  LOGIN: 'Login',
+  LOADING: 'Loading',
+
+  MAIN_TAB: 'MainTab',
+
   HOME_TAB: 'HomeTab',
   PROFILE_TAB: 'ProfileTab',
   SETTINGS_TAB: 'SettingsTab',
