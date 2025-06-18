@@ -4,6 +4,11 @@
 ## Cài đặt
 
 ```bash
+Sự dụng node 18
+```
+
+
+```bash
 yarn install
 cp .env.example .env
 yarn android # hoặc yarn ios
@@ -27,4 +32,31 @@ yarn install
 yarn android
 
 yarn ios
-```"# RN_BASE_CLI" 
+```
+
+```bash
+- Chưa thêm Splash  (react-native-bootsplash) hoặc Intro (react-native-app-intro-slider)
+- Thông báo có thể dùng toast (react-native-toast-message) hoặc Alert
+```
+
+```bash
+- Thêm font
+- Copy file .ttf của font vào src/assets/fonts (ví dụ: Roboto-Regular.ttf)
+- Mở (hoặc tạo mới) file react-native.config.js (module.exports = { assets: ['./src/assets/fonts/']})
+- npx react-native-asset
+- IOS Mở Xcode, chọn project > Info > Add font vào UIAppFonts nếu chưa tự động nhận.
+```
+
+```bash
+- Thêm icon
+- yarn add react-native-vector-icons
+- android/app/build.gradle: apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+- npx react-native-asset
+- IOS Mở Xcode, chọn project > Info > Add font vào UIAppFonts nếu chưa tự động nhận.
+```
+
+## Lỗi chạy trên IOS: command not found: gradlew
+```bash
+cd android
+./gradlew assembleDebug
+```
