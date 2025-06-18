@@ -1,44 +1,94 @@
-import React, {useState} from 'react';
-import {View, Text, Button, TextInput} from 'react-native';
-import {useLoginMutation} from '../features/auth/authApi';
-import {useAppDispatch} from '../store/hooks';
-import {login} from '../features/auth/authSlice';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigation } from '@react-navigation/native'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import * as Yup from 'yup'
+import FormInput from '../components/form/FormInput'
+import LoadingOverlay from '../components/LoadingOverlay'
+import { useLoginMutation } from '../features/auth/authApi'
+import { ROUTES } from '../navigation/routeKeys'
+import { colors } from '../themes/colors'
+import { RootStackNavigation } from '../types/navigation'
 
-export default function LoginScreen() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginApi, {isLoading}] = useLoginMutation();
-  const dispatch = useAppDispatch();
+type FormValues = {
+  keyLogin: string
+  username: string
+  password: string
+  province: string
+}
 
-  const handleLogin = async () => {
+const schema = Yup.object().shape({
+  username: Yup.string().required('Nhập tài khoản'),
+  password: Yup.string().required('Nhập mật khẩu'),
+  keyLogin: Yup.string().required('Nhập mã key'),
+  province: Yup.string().required('Nhập mã key'),
+})
+
+const AuthLogin = () => {
+  const navigation = useNavigation<RootStackNavigation>()
+  const [login, { isLoading }] = useLoginMutation()
+
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<FormValues>({
+    defaultValues: {
+      username: '',
+      password: '',
+      keyLogin: '',
+    },
+    resolver: yupResolver(schema),
+  })
+
+  const onSubmit = async (data: FormValues) => {
     try {
-      const res = await loginApi({username, password}).unwrap();
-      dispatch(login(res));
+      const res = await login(data).unwrap()
+      const check = res?.data?.accessToken
+      if (check) {
+        return navigation.reset({ index: 0, routes: [{ name: ROUTES.MAIN_TAB }] })
+      }
+      Alert.alert('Đăng nhập thất bại', 'Tài khoản hoặc mật khẩu không chính xác')
     } catch (err) {
-      alert('Login failed');
+      Alert.alert('Đăng nhập thất bại', 'Tài khoản hoặc mật khẩu không chính xác')
     }
-  };
+  }
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Login Screen</Text>
-      <TextInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        style={{borderWidth: 1, marginBottom: 8, width: 200}}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={{borderWidth: 1, marginBottom: 8, width: 200}}
-      />
-      <Button
-        title={isLoading ? 'Logging in...' : 'Login'}
-        onPress={handleLogin}
-      />
-    </View>
-  );
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Chào mừng bạn quay lại với NAMEAPP!</Text>
+
+        <FormInput name="username" control={control} placeholder="Tài khoản" />
+        <FormInput name="password" control={control} placeholder="Mật khẩu" secureTextEntry />
+        <FormInput name="keyLogin" control={control} placeholder="Key" />
+
+        <TouchableOpacity
+          onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>Đăng nhập</Text>
+        </TouchableOpacity>
+      </View>
+      <LoadingOverlay visible={isLoading} />
+    </SafeAreaView>
+  )
 }
+
+const styles = StyleSheet.create({
+  container: { padding: 20 },
+  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  button: {
+    backgroundColor: colors.primary,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  buttonText: { color: '#fff', fontWeight: 'bold' },
+})
+
+export default AuthLogin

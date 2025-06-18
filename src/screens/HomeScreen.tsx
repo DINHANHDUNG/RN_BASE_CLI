@@ -1,28 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native'
 import { useAppDispatch } from '../store/hooks'
-import { logout } from '../features/auth/authSlice'
 import Icon from '../components/Icon'
 import { textStyles } from '../themes/textStyles'
 import { ROUTES } from '../navigation/routeKeys'
 import { HomeStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { logoutApp } from '../features/auth/authActions'
+import { SelectOption } from '../components/SelectWithFlatListModal'
 
 type Props = NativeStackScreenProps<HomeStackParamList, typeof ROUTES.HOME_MAIN>
 
 export default function HomeScreen({ navigation }: Props) {
   const dispatch = useAppDispatch()
-
-  // useEffect( () => {
-    
-  //   const granted = await requestPermission(CAMERA_PERMISSION)
-  // }, []);
+  
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Home Screen</Text>
       <Text style={textStyles.h1}>Home Screen style Regular</Text>
       <Text style={textStyles.h2}>Home Screen style bold</Text>
-      <Button title="Logout" onPress={() => dispatch(logout())} />
+      <Button title="Logout" onPress={() => dispatch(logoutApp(navigation))} />
       <Icon type="ant" name="home" size={32} color="#3366FF" />
       <Text style={styles.label}>Trang chủ</Text>
 

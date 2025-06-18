@@ -1,4 +1,13 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { ROUTES } from '../../navigation/routeKeys'
+
+export type RootStackParamList = {
+  [ROUTES.MAIN_TAB]: undefined
+  [ROUTES.LOGIN]: undefined
+  [ROUTES.LOADING]: undefined
+}
+
+export type RootStackNavigation = NativeStackNavigationProp<RootStackParamList>
 
 export type MainTabParamList = {
   [ROUTES.HOME_TAB]: undefined
